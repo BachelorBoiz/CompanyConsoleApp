@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Globalization;
 
 namespace Company_ConsoleApp.Data;
@@ -68,7 +69,7 @@ public class Menu
         List<Department> departments = GetAllProcedure();
         foreach (Department department in departments)
         {
-            Console.WriteLine($"ID: {department.Id}, Name: {department.Name}, ManagerSSN {department.ManagerSSN}");
+            Console.WriteLine($"ID: {department.Id}, Name: {department.Name}, ManagerSSN {department.ManagerSSN}, Employees: {department.EmpCount}");
         }
         ShowMainMenu();
     }
@@ -99,7 +100,8 @@ public class Menu
                         {
                             Id = (int) reader["DNumber"],
                             Name = (string) reader["DName"],
-                            ManagerSSN = (int) reader["MgrSSN"]
+                            ManagerSSN = (Decimal) reader["MgrSSN"],
+                            EmpCount = (int) reader["EmpCount"]
                         };
                         departments.Add(department);
                     }
@@ -116,7 +118,7 @@ public class Menu
         Console.WriteLine("Please enter the ID of the Department you wish to see:");
         var departmentId = Int32.Parse(Console.ReadLine());
         Department department = GetByIdProcedure(departmentId);
-        Console.WriteLine($"ID: {department.Id}, Name: {department.Name}, ManagerSSN {department.ManagerSSN}");
+        Console.WriteLine($"ID: {department.Id}, Name: {department.Name}, ManagerSSN: {department.ManagerSSN}, Employees: {department.EmpCount}");
     }
 
     private Department GetByIdProcedure(int departmentId)
@@ -146,9 +148,9 @@ public class Menu
                     {
                         department = new Department
                         {
-                            Name = (string) reader["DName"],
                             Id = (int) reader["DNumber"],
-                            ManagerSSN = (int) reader["MgrSSN"],
+                            Name = (string) reader["DName"],
+                            ManagerSSN = (Decimal) reader["MgrSSN"],
                             EmpCount = (int) reader["EmpCount"]
                         };
                     }
