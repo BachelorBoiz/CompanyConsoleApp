@@ -13,14 +13,14 @@ public class Menu
                                   "Integrated security=True";
     public void Start()
     {
+        Console.WriteLine("Compulsory Assignment - DBD");
+        Console.WriteLine("");
         ShowMainMenu();
         StartLoop();
     }
 
     private void ShowMainMenu()
     {
-        Console.WriteLine("Compulsory Assignment - DBD");
-        Console.WriteLine("");
         Console.WriteLine("Please select a DB Procedure:");
         Console.WriteLine("1 - Create new Department");
         Console.WriteLine("2 - Update Department Name");
@@ -67,6 +67,8 @@ public class Menu
     {
         Console.Clear();
         List<Department> departments = GetAllProcedure();
+        Console.WriteLine("Here is a list of all Departments:");
+        Console.WriteLine("");
         foreach (Department department in departments)
         {
             Console.WriteLine($"ID: {department.Id}, Name: {department.Name}, ManagerSSN {department.ManagerSSN}, Employees: {department.EmpCount}");
