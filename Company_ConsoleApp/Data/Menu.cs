@@ -113,7 +113,51 @@ public class Menu
 
     private void GetDepartmentById()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Please enter the ID of the Department you wish to see:");
+        var departmentId = Int32.Parse(Console.ReadLine());
+        Department department = GetByIdProcedure(departmentId);
+        Console.WriteLine($"ID: {department.Id}, Name: {department.Name}, ManagerSSN {department.ManagerSSN}");
+    }
+
+    private Department GetByIdProcedure(int departmentId)
+    {
+        Department department = null;
+        // Stored Procedure Name
+        string procedureName = "usp_GetDepartment";
+        
+        // Create SQL connection object
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            // Open Connection
+            connection.Open();
+            
+            // Create a new object using the stored procedure name and connection object
+            using (SqlCommand command = new SqlCommand(procedureName, connection))
+            {
+                // Set stored procedure type
+                command.CommandType = CommandType.StoredProcedure;
+
+                // Add parameters to the stored procedure if needed
+                command.Parameters.AddWithValue("@DNumber", departmentId);
+                
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        department = new Department
+                        {
+                            Name = (string) reader["DName"],
+                            Id = (int) reader["DNumber"],
+                            ManagerSSN = (int) reader["MgrSSN"],
+                            EmpCount = (int) reader["EmpCount"]
+                        };
+                    }
+                }
+            }
+            // Close connection
+            connection.Close();
+        }
+        return department;
     }
 
     private void DeleteDepartment()
